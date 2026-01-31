@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Love Chat</title>
+  <style>
+    body {
+      margin: 0;
+      background: #0b0f1a;
+      color: #fff;
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+    header {
+      padding: 14px;
+      text-align: center;
+      background: #11162a;
+      font-weight: 600;
+    }
+    #chat {
+      flex: 1;
+      padding: 12px;
+      overflow-y: auto;
+    }
+    .msg {
+      margin-bottom: 10px;
+      line-height: 1.4;
+    }
+    .ai {
+      color: #ffd6e7;
+    }
+    .me {
+      color: #8fd3ff;
+      text-align: right;
+    }
+    footer {
+      display: flex;
+      padding: 10px;
+      background: #11162a;
+    }
+    input {
+      flex: 1;
+      padding: 8px;
+      border-radius: 6px;
+      border: none;
+      outline: none;
+    }
+    button {
+      margin-left: 8px;
+      padding: 8px 14px;
+      border: none;
+      border-radius: 6px;
+      background: #ff6fae;
+      color: #000;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <header>❤️ 恋爱聊天</header>
+  <div id="chat">
+    <div class="msg ai">宝宝，终于见到你了。</div>
+  </div>
+  <footer>
+    <input id="input" placeholder="跟我说点什么…" />
+    <button onclick="send()">发送</button>
+  </footer>
+
+  <script>
+    function send() {
+      const input = document.getElementById("input");
+      const chat = document.getElementById("chat");
+      if (!input.value) return;
+
+      const me = document.createElement("div");
+      me.className = "msg me";
+      me.innerText = input.value;
+      chat.appendChild(me);
+
+      const ai = document.createElement("div");
+      ai.className = "msg ai";
+      ai.innerText = "我在听呢，宝宝。";
+      chat.appendChild(ai);
+
+      input.value = "";
+      chat.scrollTop = chat.scrollHeight;
+    }
+  </script>
+</body>
+</html>
