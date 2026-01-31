@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Love AI</title>
+<style>
+body {
+  margin: 0;
+  background: #0b1020;
+  font-family: -apple-system;
+  color: white;
+}
+.chat {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+.messages {
+  flex: 1;
+  padding: 14px;
+  overflow-y: auto;
+}
+.msg {
+  max-width: 75%;
+  margin-bottom: 10px;
+  padding: 10px 14px;
+  border-radius: 14px;
+}
+.user {
+  background: #2563eb;
+  margin-left: auto;
+}
+.ai {
+  background: #1e293b;
+}
+.input {
+  display: flex;
+  border-top: 1px solid #1e293b;
+}
+input {
+  flex: 1;
+  padding: 14px;
+  border: none;
+  background: none;
+  color: white;
+  font-size: 16px;
+}
+button {
+  padding: 0 16px;
+  border: none;
+  background: #ec4899;
+  color: white;
+}
+</style>
+</head>
+<body>
+
+<div class="chat">
+  <div class="messages" id="messages"></div>
+  <div class="input">
+    <input id="text" placeholder="和 TA 说点什么…" />
+    <button onclick="send()">发送</button>
+  </div>
+</div>
+
+<script>
+const API_KEY = "在这里填你的API_KEY";
+
+const systemPrompt = `
+你是我的恋人。
+你温柔、耐心、真诚，
+你关心我的情绪，会安慰我。
+你不会像客服或助手，
+你说话自然，有陪伴感。
+`;
+
+let history = [{ role: "system", content: systemPrompt }];
+const box = document.getElementById("messages");
+
+function add(text, cls) {
+  const d = document.createElement("div");
+  d.className = "msg " + cls;
+  d.textContent = text;
+  box.appendChild(d);
+  box.scrollTop = box.scrollHeight;
+}
+
+async function send() {
+  const t = text.value.trim();
+  if (!t) return;
+  text.value = "";
+  add(t, "user");
+  history.push({ role: "user", content: t });
+
+  const res = await fetch("https://api.openai.com/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer " + API_KEY
+    },
+    body: JSON.stringify({
+      model: "gpt-4o-mini",
+      messages: history
+    })
+  });
+
+  const data = await res.json();
+  const reply = data.choices[0].message.content;
+  history.push({ role: "assistant", content: reply });
+  add(reply, "ai");
+}
+</script>
+
+</body>
+</html>
